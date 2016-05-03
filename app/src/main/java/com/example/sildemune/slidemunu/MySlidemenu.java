@@ -3,6 +3,7 @@ package com.example.sildemune.slidemunu;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -80,7 +81,8 @@ public class MySlidemenu extends HorizontalScrollView {
             mMenu = (ViewGroup) wrapper.getChildAt(0);
             mContent = (ViewGroup) wrapper.getChildAt(1);
             mMenuWidth = mScreenWidth - mMenuRightPadding;
-            mScrollWidth = mMenuWidth / 2;
+           // mScrollWidth = mMenuWidth / 2;
+            mScrollWidth = 100;
             mMenu.getLayoutParams().width = mMenuWidth;
             mContent.getLayoutParams().width = mScreenWidth;
         }
@@ -104,16 +106,24 @@ public class MySlidemenu extends HorizontalScrollView {
         switch (action) {
             case MotionEvent.ACTION_UP:
                 int scrollX = getScrollX();
-                if (scrollX > mScrollWidth)
-                {
-                    smoothScrollTo(0, 0);
-                    isOpen = true;
-                } else
-                {
-
-                    smoothScrollTo(mMenuWidth, 0);
-                    isOpen = false;
-
+                Log.e("log","scrollX:"+scrollX);
+                Log.e("log","mScrollWidth:"+mScrollWidth);
+                if(isOpen){
+                    if(scrollX > mScrollWidth){
+                        this.smoothScrollTo(mMenuWidth, 0);
+                        isOpen = false;
+                    }else {
+                        this.smoothScrollTo(0, 0);
+                        isOpen = true;
+                    }
+                }else{
+                    if( (mMenuWidth-scrollX)>mScrollWidth){
+                        this.smoothScrollTo(0, 0);
+                        isOpen = true;
+                    }else{
+                        this.smoothScrollTo(mMenuWidth, 0);
+                        isOpen = false;
+                    }
                 }
                 return true;
             default:
